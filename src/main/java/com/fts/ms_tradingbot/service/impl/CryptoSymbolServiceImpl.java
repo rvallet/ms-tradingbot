@@ -19,4 +19,16 @@ public class CryptoSymbolServiceImpl implements CryptoSymbolService {
         return cryptoSymbolRepository.findAll();
     }
 
+    @Override
+    public CryptoSymbol getCryptoSymbolById(String id) {
+        return cryptoSymbolRepository.findById(id).orElse(null);
+    }
+
+    public CryptoSymbol getCryptoSymbolBySymbol(String symbol) {
+        return cryptoSymbolRepository.findAll().stream()
+                .filter(cryptoSymbol -> cryptoSymbol.getSymbol().equalsIgnoreCase(symbol))
+                .findFirst()
+                .orElse(null);
+    }
+
 }

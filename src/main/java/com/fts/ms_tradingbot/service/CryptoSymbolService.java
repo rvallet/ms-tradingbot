@@ -9,5 +9,7 @@ import java.util.List;
 public interface CryptoSymbolService {
 
     List<CryptoSymbol> getAllCryptoSymbols();
+    CryptoSymbol getCryptoSymbolById(String id);
+    CryptoSymbol getCryptoSymbolBySymbol(String symbol);
 
 }
