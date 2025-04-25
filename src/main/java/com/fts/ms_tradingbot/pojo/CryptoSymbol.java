@@ -22,6 +22,18 @@ public class CryptoSymbol {
     public CryptoSymbol() {
     }
 
+    public CryptoSymbol(String symbol, String name, boolean is_active, Double start_price, Double current_price,
+                        Double percentage_change, Date created_at, Date updated_at) {
+        this.symbol = symbol;
+        this.name = name;
+        this.is_active = is_active;
+        this.start_price = start_price;
+        this.current_price = current_price;
+        this.percentage_change = percentage_change;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+    }
+
     public String getId() {
         return id;
     }
