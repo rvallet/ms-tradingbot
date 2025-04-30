@@ -1,56 +1,68 @@
 package com.fts.ms_tradingbot.ws;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fts.ms_tradingbot.ApiRegistration;
 import com.fts.ms_tradingbot.TestUtils;
-import com.fts.ms_tradingbot.dao.CryptoSymbolRepository;
 import com.fts.ms_tradingbot.pojo.CryptoSymbol;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.Assert;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles(profiles = {"test"})
 @AutoConfigureMockMvc
+@DirtiesContext
+@ActiveProfiles(profiles = { "test" })
 public class CryptoSymbolApiTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
     @Autowired
-    protected TestUtils testUtils;
+    private MongoOperations mongoOps;
 
     @Autowired
-    private CryptoSymbolRepository cryptoSymbolRepository;
+    private TestUtils testUtils;
 
-    @Before
+    @AfterEach
+    public void tearDown() {
+        // Suppression des données de test
+        mongoOps.dropCollection(CryptoSymbol.class);
+    }
+
+    @BeforeEach
     public void setUp() {
-        // Suppression de toutes les données de test
-        cryptoSymbolRepository.deleteAll();
         // Création des données de test
         List<CryptoSymbol> mockSymbols = Arrays.asList(
-        new CryptoSymbol("BTCUSDC", "Bitcoin", true, null, null, null, null, null),
-        new CryptoSymbol("ETHUSDC", "Ethereum", true, null, null, null, null, null)
+        new CryptoSymbol("BTCUSDC", "Bitcoin", true, 1.0, 2.0, 5.0, null, null),
+        new CryptoSymbol("ETHUSDC", "Ethereum", true, 3.0, 4.0, 10.0, null, null)
         );
         // Enregistrement des données de test dans la base de données
-        cryptoSymbolRepository.saveAll(mockSymbols);
+        mongoOps.insert(mockSymbols, CryptoSymbol.class);
     }
 
     @Test
@@ -63,14 +75,14 @@ public class CryptoSymbolApiTest {
                 .andReturn();
         // @formatter:on
 
-        String contentAsString = mvcResult.getResponse().getContentAsString(Charset.defaultCharset());
+        String contentAsString = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         List<CryptoSymbol> responseSymbols = testUtils.convertJsonToObjectList(contentAsString, CryptoSymbol.class);
 
-        Assert.assertNotNull(responseSymbols);
-        Assert.assertFalse(responseSymbols.isEmpty());
-        Assert.assertEquals(2, responseSymbols.size());
-        Assert.assertEquals("BTCUSDC", responseSymbols.getFirst().getSymbol());
-        Assert.assertEquals("Bitcoin", responseSymbols.getFirst().getName());
+        assertNotNull(responseSymbols);
+        assertFalse(responseSymbols.isEmpty());
+        assertEquals(2, responseSymbols.size());
+        assertEquals("BTCUSDC", responseSymbols.get(0).getSymbol());
+        assertEquals("Bitcoin", responseSymbols.get(0).getName());
     }
 
     @Test
@@ -86,12 +98,12 @@ public class CryptoSymbolApiTest {
                 .andReturn();
         // @formatter:on
 
-        String contentAsString = mvcResult.getResponse().getContentAsString(Charset.defaultCharset());
+        String contentAsString = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         CryptoSymbol responseSymbol = testUtils.convertStringToObject(contentAsString, CryptoSymbol.class);
 
-        Assert.assertNotNull(responseSymbol);
-        Assert.assertEquals(symbol, responseSymbol.getSymbol());
-        Assert.assertEquals("Bitcoin", responseSymbol.getName());
+        assertNotNull(responseSymbol);
+        assertEquals(symbol, responseSymbol.getSymbol());
+        assertEquals("Bitcoin", responseSymbol.getName());
 
     }
 
