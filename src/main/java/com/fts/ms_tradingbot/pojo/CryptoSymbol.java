@@ -1,6 +1,7 @@
 package com.fts.ms_tradingbot.pojo;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -10,7 +11,15 @@ public class CryptoSymbol {
 
     @Id
     private String id;
+
+    /**
+     * Le symbole de la crypto-monnaie.
+     * Il doit être unique en BDD, il faut donc créer un index unique sur ce champ.
+     * Dans Mongo : db.CryptoSymbols.createIndex({ symbol: 1 }, { unique: true })
+     */
+    @Indexed(unique = true)
     private String symbol;
+
     private String name;
     private boolean is_active;
     private Double start_price;
@@ -19,19 +28,33 @@ public class CryptoSymbol {
     private Date created_at;
     private Date updated_at;
 
+    /**
+     * Constructeur par défaut pour MongoDB
+     * Ce constructeur est utilisé par Spring Data MongoDB pour créer des instances de la classe.
+     * Il est important de le laisser public et sans paramètres.
+     */
     public CryptoSymbol() {
     }
 
+    /**
+     * Constructeur avec paramètres
+     * @param symbol - le symbole de la crypto-monnaie
+     * @param name - le nom de la crypto-monnaie
+     * @param is_active - indique si la crypto-monnaie est active
+     * @param start_price - le prix de départ de la crypto-monnaie
+     * @param current_price - le prix actuel de la crypto-monnaie
+     * @param percentage_change - le pourcentage de changement de la crypto-monnaie
+     */
     public CryptoSymbol(String symbol, String name, boolean is_active, Double start_price, Double current_price,
-                        Double percentage_change, Date created_at, Date updated_at) {
+                        Double percentage_change) {
         this.symbol = symbol;
         this.name = name;
         this.is_active = is_active;
         this.start_price = start_price;
         this.current_price = current_price;
         this.percentage_change = percentage_change;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.created_at = new Date();
+        this.updated_at = new Date();
     }
 
     public String getId() {
