@@ -23,4 +23,12 @@ public class TestUtils {
         return objectMapper.readValue(json, type);
     }
 
+    public <T> String convertObjectToJson(T object) throws IOException {
+        return objectMapper.writeValueAsString(object);
+    }
+
+    public <T> String convertObjectListToJson(List<T> objectList) throws IOException {
+        return objectMapper.writeValueAsString(objectList);
+    }
+
 }

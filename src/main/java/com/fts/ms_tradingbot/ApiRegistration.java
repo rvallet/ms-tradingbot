@@ -5,5 +5,7 @@ public interface ApiRegistration {
     String SERVICE_ID = "TB";
     String REST_PREFIX = "/ms-tradingbot/";
     String REST_CRYPTO_SYMBOLS = "crypto-symbols";
+    String SYMBOL = "/symbol";
+    String ID = "/id";
 
 }

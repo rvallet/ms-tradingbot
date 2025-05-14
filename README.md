@@ -21,22 +21,39 @@ Ce microservice est conçu pour interagir avec l'API de Binance afin de facilite
 
 ## Technologies utilisées
 
-- Java 11+
-- Spring Boot
-- Maven
+- Java 21
+- Spring Boot 3.4.4
+- Maven 3.14.0
 - API de Binance
 
 ## Prérequis
 
-- Java 11 ou une version supérieure
-- Maven
-- Un compte Binance et une clé API
+- Java JRE ou JDK 21 installé sur votre machine.
+- MongoDB 6.0 ou supérieur pour la gestion de la base de données.
 
 ## Installation
-..
+
+1. Clonez le dépôt sur votre machine locale :
+   ```bash
+   git clone https://github.com/rvallet/ms-tradingbot.git
+   ````
+2. Accédez au répertoire du projet :
+   ```bash
+   cd ms_tradingbot
+   ```
+3. Générez le projet :
+   ```bash
+   mvn clean package
+   ```
+4. Lancez l'application :
+   ```bash
+   java -jar $(ls -t target/*.jar | head -n 1)
+   ```
 
 ## Utilisation
-..
+
+Lorsque l'application est lancée, exécuter les requêtes GET, POST, PUT et DELETE sur les endpoints suivants :
+- http://localhost:9090/swagger-ui/index.html
 
 ## License
 
