@@ -45,10 +45,15 @@ Ce microservice est conçu pour interagir avec l'API de Binance afin de facilite
    ```bash
    mvn clean package
    ```
-4. Lancez l'application :
+4. Lancez l'application à partir d'un Shell (bash) :
    ```bash
    java -jar $(ls -t target/*.jar | head -n 1)
    ```
+Note : si votre variable d'environnement `JAVA_HOME` n'est pas configurée ou bien verrouillée en administrateur, 
+vous pouvez exécuter le jar directement avec la commande suivante en ajustant avec le chemin de votre JDK.
+```bash
+  /jdks/temurin-21.0.7/bin/java -jar $(ls -t target/*.jar | head -n 1)
+```
 
 ## Utilisation
 
