@@ -219,4 +219,19 @@ public class CryptoSymbolApiTest {
         assertEquals(id, responseSymbol.getId());
     }
 
+    @Test
+    public void testFindCryptoSymbolByIdNotFound() throws Exception {
+
+        String id = "INVALID_ID";
+
+        // @formatter:off
+        mockMvc.perform(
+                get(ApiRegistration.REST_PREFIX + ApiRegistration.REST_CRYPTO_SYMBOLS + ApiRegistration.ID + "/{cryptoid}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNotFound());
+        // @formatter:on
+
+    }
+
 }
