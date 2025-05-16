@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<!-- Parent - Permet d'hériter des configurations d'un POM parent -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -10,33 +11,35 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<!-- Project Information -->
+	<!-- Project Information - Permet de définir les informations du projet -->
 	<groupId>com.fts</groupId>
 	<artifactId>ms_tradingbot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-tradingbot</name>
 	<description>Test microservice pour API Binance</description>
 
-	<!-- Packaging -->
+	<!-- Définition des propriétés de configuration du projet (packaging, encodage, version Java...) -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>21</java.version>
 	</properties>
 
+	<!-- Déclaration des dépendances du projet -->
 	<dependencies>
 
-		<!-- Spring Boot Starter Web -->
+		<!-- Spring Boot Starter Web - Fournit les dépendances pour créer des applications web RESTful avec Spring MVC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Spring Boot Starter Test -->
+		<!-- Spring Boot Starter Test  - Permet d'effectuer des tests unitaires et d'intégration -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			<!-- On exclut la dépendance JUnit Vintage pour éviter les conflits avec JUnit 5 -->
 			<exclusions>
 				<exclusion>
 					<groupId>org.junit.vintage</groupId>
@@ -45,37 +48,49 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Mongo Flapdoodle Database (Tests) -->
+		<!-- Mongo Flapdoodle Database - Permet de simuler une base de données MongoDB pour les tests -->
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<version>4.20.0</version>
+			<!-- On déclare la portée de cette dépendance pour qu'elle ne soit utilisée que lors des tests -->
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Spring Data MongoDB -->
+		<!-- Spring Data MongoDB - Permet d'interagir avec MongoDB -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 
-		<!-- Swagger UI -->
+		<!-- Swagger UI - permet d'afficher la documentation de l'API -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.8.6</version>
 		</dependency>
 
+		<!-- Hibernate Validator : implémentation de Bean Validation (Jakarta Validation)
+             utilisée pour définir des contraintes de validation sur les objets,
+             et également par Spring pour la validation automatique des Beans de l'application -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>8.0.2.Final</version>
+		</dependency>
+
 	</dependencies>
 
+	<!-- Configuration de la phase de build du projet -->
 	<build>
 		<plugins>
 
-			<!-- Spring Boot Maven Plugin -->
+			<!-- Plugin Maven pour Spring Boot, facilite la création et l'exécution d'applications Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- Plugin Maven pour compiler le code Java, spécifie la version de Java à utiliser -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -85,6 +100,7 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+			<!-- Plugin Maven pour exécuter des tests unitaires -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
