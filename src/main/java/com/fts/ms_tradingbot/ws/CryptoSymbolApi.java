@@ -57,11 +57,8 @@ public class CryptoSymbolApi {
 
     @DeleteMapping(ApiRegistration.REST_CRYPTO_SYMBOLS + ApiRegistration.ID + "/{cryptoid}")
     public ResponseEntity<Void> deleteCryptoSymbol(@PathVariable(value = "cryptoid") String id) {
-        if (cryptoSymbolService.deleteById(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return cryptoSymbolService.deleteById(id) ?
+                ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
 }

@@ -41,8 +41,7 @@ import java.util.Objects;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) //TODO Remy
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ActiveProfiles(profiles = { "test" })
 public class CryptoSymbolApiTest {
 
@@ -239,9 +238,17 @@ public class CryptoSymbolApiTest {
     @Test
     public void testDeleteById() throws Exception {
 
+        // Création d'une entrée à supprimer
+        CryptoSymbol symbolToDelete = new CryptoSymbol();
+        symbolToDelete.setSymbol("ENTRY_TO_DELETE");
+        mongoOps.insert(symbolToDelete);
+
+        // On récupère l'ID de l'entrée à supprimer
         String id = Objects.requireNonNull(mongoOps.findOne(
-                query(where("symbol").is(BTCUSDC)),
+                query(where("symbol").is("ENTRY_TO_DELETE")),
                 CryptoSymbol.class)).getId();
+        // Vérification de l'existence de l'entrée avant la suppression
+        assertNotNull(id);
 
         // @formatter:off
         mockMvc.perform(
@@ -252,6 +259,19 @@ public class CryptoSymbolApiTest {
         // @formatter:on
     }
 
+    @Test
+    public void testDeleteByIdNotFound() throws Exception {
 
+        String id = "INVALID_ID";
+
+        // @formatter:off
+        mockMvc.perform(
+                delete(ApiRegistration.REST_PREFIX + ApiRegistration.REST_CRYPTO_SYMBOLS + ApiRegistration.ID + "/{cryptoid}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNotFound());
+        // @formatter:on
+
+    }
 
 }
