@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,7 +41,8 @@ import java.util.Objects;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) //TODO Remy
 @ActiveProfiles(profiles = { "test" })
 public class CryptoSymbolApiTest {
 
@@ -233,5 +235,23 @@ public class CryptoSymbolApiTest {
         // @formatter:on
 
     }
+
+    @Test
+    public void testDeleteById() throws Exception {
+
+        String id = Objects.requireNonNull(mongoOps.findOne(
+                query(where("symbol").is(BTCUSDC)),
+                CryptoSymbol.class)).getId();
+
+        // @formatter:off
+        mockMvc.perform(
+                delete(ApiRegistration.REST_PREFIX + ApiRegistration.REST_CRYPTO_SYMBOLS + ApiRegistration.ID + "/{cryptoid}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNoContent());
+        // @formatter:on
+    }
+
+
 
 }

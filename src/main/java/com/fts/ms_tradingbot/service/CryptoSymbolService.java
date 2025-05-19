@@ -56,4 +56,11 @@ public interface CryptoSymbolService {
      */
     CryptoSymbol save(CryptoSymbol cryptoSymbol);
 
+    /**
+     * Supprimer un CryptoSymbol
+     * @param id - l'identifiant Mongo du CryptoSymbol à supprimer
+     * @return - true si la suppression a réussi, false sinon
+     */
+    boolean deleteById(String id);
+
 }

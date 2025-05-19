@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
 @Service
 public class CryptoSymbolServiceImpl implements CryptoSymbolService {
 
@@ -61,6 +59,16 @@ public class CryptoSymbolServiceImpl implements CryptoSymbolService {
     public Optional<CryptoSymbol> findById(String id) {
         LOGGER.debug("findById : {}", id);
         return cryptoSymbolRepository.findById(id);
+    }
+
+    @Override
+    public boolean deleteById(String id) {
+        LOGGER.debug("deleteById : {}", id);
+        if (cryptoSymbolRepository.existsById(id)) {
+            cryptoSymbolRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
