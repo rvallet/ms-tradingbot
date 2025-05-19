@@ -1,5 +1,6 @@
 package com.fts.ms_tradingbot.pojo;
 
+import com.fts.ms_tradingbot.pojo.embedded.CommonData;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,6 +26,7 @@ public class CryptoSymbol {
     private Double start_price;
     private Double current_price;
     private Double percentage_change;
+    private CommonData commonData;
     private Date created_at;
     private Date updated_at;
 
@@ -53,6 +55,7 @@ public class CryptoSymbol {
         this.start_price = start_price;
         this.current_price = current_price;
         this.percentage_change = percentage_change;
+        this.commonData = new CommonData();
         this.created_at = new Date();
         this.updated_at = new Date();
     }
@@ -111,6 +114,14 @@ public class CryptoSymbol {
 
     public void setPercentage_change(Double percentage_change) {
         this.percentage_change = percentage_change;
+    }
+
+    public CommonData getCommonData() {
+        return commonData;
+    }
+
+    public void setCommonData(CommonData commonData) {
+        this.commonData = commonData;
     }
 
     public Date getCreated_at() {
